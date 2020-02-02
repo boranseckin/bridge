@@ -24,8 +24,8 @@ Run [client.js](client.js) file from your clients to use the chat.
 - [socket.io-client](https://www.npmjs.com/package/socket.io-client)
 - [ansi-color](https://www.npmjs.com/package/ansi-color)
 
-## Author
+### Author
 - **Boran Seckin**
 
-## License
+### License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
