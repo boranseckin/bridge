@@ -139,8 +139,12 @@ function chatCommands(cmd, arg = '') {
     switch (cmd) {
     case 'username':
         if (arg) {
-            username = arg;
             socket.emit('username', { username: arg });
+            socket.once('username', (data) => {
+                if (data.type === 'confirm') {
+                    username = data.username;
+                }
+            });
         }
         rl.prompt();
         break;

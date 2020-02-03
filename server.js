@@ -86,6 +86,7 @@ function handleChangeUsername(mainSocket, currentSocket, data) {
 
     users[userIndex].username = data.username;
     handleSend(mainSocket, currentSocket, { type: 'notice', message: msg });
+    mainSocket.to(currentSocket.id).emit('username', { type: 'confirm', username: data.username });
 }
 
 function handleListUsers(mainSocket, currentSocket) {
@@ -125,7 +126,16 @@ io.sockets.on('connection', (socket) => {
     });
 
     socket.on('username', (data) => {
-        handleChangeUsername(io.sockets, socket, data);
+        const query = users.find((user) => data.username === user.username);
+
+        if (!query) {
+            handleChangeUsername(io.sockets, socket, data);
+            return;
+        }
+
+        io.sockets.to(socket.id).emit('username', { type: 'denied' });
+        const msg = `[${data.username}] is currently used by another user!`;
+        io.sockets.to(socket.id).emit('message', { type: 'notice', message: msg });
     });
 
     socket.on('list_users', () => {
