@@ -157,8 +157,11 @@ function handleChangeUsername(mainSocket, currentSocket, data) {
 
     // Update the users array.
     users[userIndex].username = data.username;
+<<<<<<< HEAD
     handleSend(mainSocket, currentSocket, { type: 'notice', message: msg });
     mainSocket.to(currentSocket.id).emit('username', { type: 'confirm', username: data.username });
+=======
+>>>>>>> d1e1d59bf2707eb84f840ccd85f35e5e9fe4d17e
 }
 
 function handleListUsers(mainSocket, currentSocket) {
