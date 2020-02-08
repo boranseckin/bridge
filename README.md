@@ -19,7 +19,7 @@ Run [server.js](server.js) file first from your server to start listening client
 
 Run [client.js](client.js) file from your clients to use the chat.
 
-## Dependecies
+## Dependencies
 - [socket.io](https://www.npmjs.com/package/socket.io)
 - [socket.io-client](https://www.npmjs.com/package/socket.io-client)
 - [ansi-color](https://www.npmjs.com/package/ansi-color)
