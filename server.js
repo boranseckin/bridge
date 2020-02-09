@@ -57,6 +57,8 @@ function handleHandshake(mainSocket, currentSocket, data) {
                 rooms: currentSocket.rooms,
             });
 
+            console.log(`User [${data.username}] connected from [${currentSocket.request.connection.remoteAddress}] with ID [${currentSocket.id}]`);
+
             // Send a confirmation to the user.
             mainSocket.to(currentSocket.id).emit('handshake', { type: 'confirm' });
 
@@ -73,6 +75,8 @@ function handleHandshake(mainSocket, currentSocket, data) {
             username: data.username,
             rooms: currentSocket.rooms,
         });
+
+        console.log(`User [${data.username}] reconnected from [${currentSocket.request.connection.remoteAddress}] with ID [${currentSocket.id}]`);
 
         // Send a confirmation to the user.
         mainSocket.to(currentSocket.id).emit('handshake', { type: 'confirm' });
@@ -238,6 +242,12 @@ io.sockets.on('connection', (socket) => {
 
     // If user disconnects, remove them from the array.
     socket.on('disconnect', () => {
-        users = users.filter((user) => user.id !== socket.id);
+        users = users.filter((user) => {
+            if (user.id !== socket.id) {
+                return user;
+            }
+            console.log(`User [${user.username}] disconnected from [${socket.request.connection.remoteAddress}] with ID [${socket.id}]`);
+            return null;
+        });
     });
 });
