@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * SCS - Server
+ * Bridge - Server
  * *
  * In this document,
  * 'io.sockets' is used as the defualt channel ('/'),
@@ -16,7 +16,7 @@ const socketio = require('socket.io');
 const port = 3636; // The port for the socket to listen
 const io = socketio.listen(port);
 
-console.log(`SCS Server initialized at port ${port}`);
+console.log(`Bridge - Server initialized at port ${port}`);
 
 // Users array to keep track of online users and bind their usernames to their IDs.
 let users = [];

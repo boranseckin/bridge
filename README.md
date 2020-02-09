@@ -1,6 +1,6 @@
-# SCS - Simple Chat Service
+# Bridge - Simple Chat Service
 
-SCS is a basic CLI chat application using [Socket.io](https://socket.io/).
+Bridge is a basic CLI chat application using [Socket.io](https://socket.io/).
 
 ## Features
 - Server, port and channel selection when started.

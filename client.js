@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * SCS - Client
+ * Bridge - Client
  * *
- * This code is used to connect to a Socket.io server created by SCS-Server.
+ * This code is used to connect to a Socket.io server created by Bridge-Server.
  */
 
 const readline = require('readline');

@@ -1,14 +1,14 @@
 {
-  "name": "@boranseckin/scs",
+  "name": "@boranseckin/bridge",
   "version": "1.0.0",
-  "description": "Simple Chat Service",
+  "description": "Bridge - Simple Chat Service with Socket.io",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "scs": "client.js",
-    "scs-server": "server.js"
+    "bridge": "client.js",
+    "bridge-server": "server.js"
   },
   "author": "Boran Seckin",
   "license": "MIT",
