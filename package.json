@@ -10,6 +10,9 @@
     "bridge": "client.js",
     "bridge-server": "server.js"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "author": "Boran Seckin",
   "license": "MIT",
   "dependencies": {
