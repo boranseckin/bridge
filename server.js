@@ -13,7 +13,20 @@
 
 const socketio = require('socket.io');
 
-const port = 3636; // The port for the socket to listen
+function handleParse(args) {
+    /**
+     * Get the port number as a command line argument
+     */
+    let portIndex;
+    args.forEach((arg, index) => {
+        if (arg.startsWith('-p') || arg.startsWith('--port')) {
+            portIndex = index + 1;
+        }
+    });
+    return args[portIndex];
+}
+
+const port = handleParse(process.argv) || 3636; // The port for the socket to listen
 const io = socketio.listen(port);
 
 console.log(`Bridge - Server initialized at port ${port}`);
