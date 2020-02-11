@@ -253,21 +253,47 @@ function chatCommands(cmd, arg = '') {
         break;
 
     case 'ch':
-        // Used to change the channel. Currently DISABLED.
-        /*
-        console_out(color(`Leaving the channel [/${channel}]`, 'yellow'));
+        // Used to change the channel.
+        consoleOut(color(`Leaving the channel [/${channel}]`, 'yellow'));
         socket.disconnect();
 
-        channel = arg ? arg : '';
+        // Change the channel to the argument or default.
+        channel = arg || '';
         socket = socketio.connect(`http://${server}:${port}/${channel}`, opts);
 
+        // Set fallback in case the channel does not respond.
+        // eslint-disable-next-line no-case-declarations
+        const timeout = setTimeout(() => {
+            consoleOut(color(`Channel /[${channel}] did not respond!`, 'red'));
+            // Connect to the default channel.
+            channel = '';
+            socket = socketio.connect(`http://${server}:${port}/${channel}`, opts);
+            socket.once('connect', () => {
+                // Send handshake information to the server.
+                socket.emit('handshake', { first: false, username });
+
+                consoleOut(color(`Entered the channel [/${channel}]`, 'yellow'));
+                updateSocket(socket);// Update sockets.
+
+                // Emit notice to the channel.
+                message = `[${username}] has joined [#default]!`;
+                socket.emit('send', { type: 'notice', message });
+            });
+        }, 2000);
+
+        // If connects clear fallback and emit notice to the channel.
         socket.once('connect', () => {
-            console_out(color(`Entered the channel [/${channel}]`, 'yellow'));
-            updateSocket(socket);
-            let msg = `[${username}] has joined [#default]!`;
-            socket.emit('send', { type: 'notice', message: msg });
+            clearTimeout(timeout);
+
+            // Send handshake information to the server.
+            socket.emit('handshake', { first: false, username });
+
+            consoleOut(color(`Entered the channel [/${channel}]`, 'yellow'));
+            updateSocket(socket); // Update sockets.
+
+            message = `[${username}] has joined [#default]!`;
+            socket.emit('send', { type: 'notice', message });
         });
-        */
         break;
 
     case 'room':
