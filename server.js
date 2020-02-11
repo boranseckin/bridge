@@ -15,21 +15,32 @@ const socketio = require('socket.io');
 
 function handleParse(args) {
     /**
-     * Get the port number as a command line argument
+     * Get the port number and the channel name as command line arguments
      */
+
     let portIndex;
+    let channelIndex;
+
     args.forEach((arg, index) => {
         if (arg.startsWith('-p') || arg.startsWith('--port')) {
             portIndex = index + 1;
+        } else if (arg.startsWith('-c') || arg.startsWith('--channel')) {
+            channelIndex = index + 1;
         }
     });
-    return args[portIndex];
+
+    return {
+        port: args[portIndex] || 3636,
+        channel: args[channelIndex] || '',
+    };
 }
 
-const port = handleParse(process.argv) || 3636; // The port for the socket to listen
+// The port and the channel for the socket to listen
+const { port, channel } = handleParse(process.argv);
+
 const io = socketio.listen(port);
 
-console.log(`Bridge - Server initialized at port ${port}`);
+console.log(`Bridge - Server initialized! [Port]: ${port} - [Channel]: /${channel}`);
 
 // Users array to keep track of online users and bind their usernames to their IDs.
 let users = [];
@@ -198,69 +209,73 @@ function handleListUsers(mainSocket, currentSocket) {
     });
 }
 
-/**
- * When there is an open connection initialize all the listeners.
- */
-io.sockets.on('connection', (socket) => {
-    // Automatically assign each user to the default room.
-    socket.join('default');
+function openSocket(mainSocket) {
+    /**
+     * When there is an open connection initialize all the listeners.
+     */
+    mainSocket.on('connection', (socket) => {
+        // Automatically assign each user to the default room.
+        socket.join('default');
 
-    // Except a handshake from the user.
-    socket.once('handshake', (data) => {
-        handleHandshake(io.sockets, socket, data);
-    });
+        // Except a handshake from the user.
+        socket.once('handshake', (data) => {
+            handleHandshake(mainSocket, socket, data);
+        });
 
-    // When user sends a message, handle the transmission.
-    socket.on('send', (data) => {
-        handleSend(io.sockets, socket, data);
-    });
+        // When user sends a message, handle the transmission.
+        socket.on('send', (data) => {
+            handleSend(mainSocket, socket, data);
+        });
 
-    // When user whispers another user, handle the whisper.
-    socket.on('whisper', (data) => {
-        handleWhisper(io.sockets, socket, data);
-    });
+        // When user whispers another user, handle the whisper.
+        socket.on('whisper', (data) => {
+            handleWhisper(mainSocket, socket, data);
+        });
 
-    // When user requests a room change, handle the change.
-    socket.on('room', (data) => {
-        // If the command was sent without an argument ('/room'), assume default room.
-        const targetRoom = data.room ? data.room : 'default';
+        // When user requests a room change, handle the change.
+        socket.on('room', (data) => {
+            // If the command was sent without an argument ('/room'), assume default room.
+            const targetRoom = data.room ? data.room : 'default';
 
-        if (rooms.find((room) => room.name === targetRoom)) {
-            // If the room already exists, handle change.
-            handleChangeRoom(io.sockets, socket, targetRoom);
-        } else {
-            // If the room does not exists, create a new room.
-            handleNewRoom(io.sockets, socket, { room: targetRoom });
-        }
-    });
-
-    // When user requests a username change, handle the change.
-    socket.on('username', (data) => {
-        const query = users.find((user) => data.username === user.username);
-
-        if (!query) {
-            handleChangeUsername(io.sockets, socket, data);
-            return;
-        }
-
-        io.sockets.to(socket.id).emit('username', { type: 'denied' });
-        const msg = `[${data.username}] is currently used by another user!`;
-        io.sockets.to(socket.id).emit('message', { type: 'notice', message: msg });
-    });
-
-    // When user requests to list online users, handle the list.
-    socket.on('list_users', () => {
-        handleListUsers(io.sockets, socket);
-    });
-
-    // If user disconnects, remove them from the array.
-    socket.on('disconnect', () => {
-        users = users.filter((user) => {
-            if (user.id !== socket.id) {
-                return user;
+            if (rooms.find((room) => room.name === targetRoom)) {
+                // If the room already exists, handle change.
+                handleChangeRoom(mainSocket, socket, targetRoom);
+            } else {
+                // If the room does not exists, create a new room.
+                handleNewRoom(mainSocket, socket, { room: targetRoom });
             }
-            console.log(`User [${user.username}] disconnected from [${socket.request.connection.remoteAddress}] with ID [${socket.id}]`);
-            return null;
+        });
+
+        // When user requests a username change, handle the change.
+        socket.on('username', (data) => {
+            const query = users.find((user) => data.username === user.username);
+
+            if (!query) {
+                handleChangeUsername(mainSocket, socket, data);
+                return;
+            }
+
+            mainSocket.to(socket.id).emit('username', { type: 'denied' });
+            const msg = `[${data.username}] is currently used by another user!`;
+            mainSocket.to(socket.id).emit('message', { type: 'notice', message: msg });
+        });
+
+        // When user requests to list online users, handle the list.
+        socket.on('list_users', () => {
+            handleListUsers(mainSocket, socket);
+        });
+
+        // If user disconnects, remove them from the array.
+        socket.on('disconnect', () => {
+            users = users.filter((user) => {
+                if (user.id !== socket.id) {
+                    return user;
+                }
+                console.log(`User [${user.username}] disconnected from [${socket.request.connection.remoteAddress}] with ID [${socket.id}]`);
+                return null;
+            });
         });
     });
-});
+}
+
+openSocket(io.of(`/${channel}`));
