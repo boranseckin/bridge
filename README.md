@@ -29,12 +29,12 @@ Install the bridge package by running `npm install -g boranseckin/bridge`.
 2. You will see the log of connections on your terminal.
 
 ### Commands
-Everything starting with a forward slash (`/`) is assumed as a command.
+Everything starting with a forward slash (`/`) is assumed to be a command.
 
 - `/me <message>` is used to send emotes. If sent without a message, acts as a indicator.
 - `/w <to> <message>` is used to whisper to a specific user. `<to>` has to be an online user in the server.
 - `/username <username>` is used to change the username.
-- `/room <room>` is used to change the room. If the room name is empty, user will be assigned back to the `#default` room.
+- `/room <room>` is used to change the room. If the room name is empty, user will be assigned to the `#default` room.
 - `/clear` is used to clear the chat for the user.
 - `/users` is used to list all online users with their room names and IDs.
 - `/id` is used to print user's ID.
