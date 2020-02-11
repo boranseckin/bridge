@@ -13,11 +13,20 @@ Bridge is a basic CLI chat application using [Socket.io](https://socket.io/).
 - Colors... Lots of colors!
 
 ## Usage
-The default port is set as 3636. If you would like to use a different port change the variable at the [line 5 of server.js](server.js#L5).
+Install the bridge package by running `npm install -g boranseckin/bridge`.
 
-Run [server.js](server.js) file first from your server to start listening clients.
+### Client
+1. Run `npx bridge` to start the client.
+2. When prompted `Server:`, enter the server URL in the form of `<domain>:<port>/<channel>`.
+    - If you do not specify channel, it will be assumed `/`.
+    - If you do not specify port, it will be assumed `3636`.
+    - If you do not specify domain, it will be assumed `localhost`.
+3. When prompted `Username:`, enter the desired username.
 
-Run [client.js](client.js) file from your clients to use the chat.
+### Server
+1. Run `npx bridge-server` to start the server.
+    - If you want to change the default port (3636), use `npx bridge-server -p <port>`.
+2. You will see the log of connections on your terminal.
 
 ### Commands
 Everything starting with a forward slash (`/`) is assumed as a command.
