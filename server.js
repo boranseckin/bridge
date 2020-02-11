@@ -18,20 +18,21 @@ function handleParse(args) {
      * Get the port number and the channel name as command line arguments
      */
 
-    let portIndex;
-    let channelIndex;
+    let port;
+    const channel = []; // Array because of more than one channel
 
     args.forEach((arg, index) => {
         if (arg.startsWith('-p') || arg.startsWith('--port')) {
-            portIndex = index + 1;
+            port = args[index + 1];
         } else if (arg.startsWith('-c') || arg.startsWith('--channel')) {
-            channelIndex = index + 1;
+            // Add each '-c' argument to the channel array.
+            channel.push(args[index + 1]);
         }
     });
 
     return {
-        port: args[portIndex] || 3636,
-        channel: args[channelIndex] || '',
+        port: port || 3636,
+        channel,
     };
 }
 
@@ -278,4 +279,10 @@ function openSocket(mainSocket) {
     });
 }
 
-openSocket(io.of(`/${channel}`));
+// Start server at the default channel.
+openSocket(io.of('/'));
+
+// Start server at each channel argument.
+channel.forEach((ch) => {
+    openSocket(io.of(`/${ch}`));
+});
