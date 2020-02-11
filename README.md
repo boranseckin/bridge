@@ -19,6 +19,20 @@ Run [server.js](server.js) file first from your server to start listening client
 
 Run [client.js](client.js) file from your clients to use the chat.
 
+### Commands
+Everything starting with a forward slash (`/`) is assumed as a command.
+
+- `/me <message>` is used to send emotes. If sent without a message, acts as a indicator.
+- `/w <to> <message>` is used to whisper to a specific user. `<to>` has to be an online user in the server.
+- `/username <username>` is used to change the username.
+- `/room <room>` is used to change the room. If the room name is empty, user will be assigned back to the `#default` room.
+- `/clear` is used to clear the chat for the user.
+- `/users` is used to list all online users with their room names and IDs.
+- `/id` is used to print user's ID.
+- `/server` is used to print server's address.
+- `/status` is used to print the connection status.
+- `/exit` is used to exit the program.
+
 ## Dependencies
 - [socket.io](https://www.npmjs.com/package/socket.io)
 - [socket.io-client](https://www.npmjs.com/package/socket.io-client)
