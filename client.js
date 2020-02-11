@@ -103,6 +103,8 @@ function parseAddress(address, callback) {
 
 // Ask user to input the server address.
 rl.question('Server: ', (address) => {
+    let timeout;
+
     // Parse the address.
     parseAddress(address, () => {
         // Connect to the specified address.
@@ -113,7 +115,7 @@ rl.question('Server: ', (address) => {
     socket.once('connect', () => {
         // Update the local user ID value.
         id = socket.id;
-        consoleOut(color(`[!] Connected to ${socket.io.uri}`, 'yellow'));
+        consoleOut(color(`[!] Connecting to ${socket.io.uri}`, 'yellow'));
 
         // Ask user to input a username.
         rl.question('Username: ', (input) => {
@@ -123,6 +125,11 @@ rl.question('Server: ', (address) => {
                 username = input;
                 // Send a handshake request, indicating that this is the initial connection.
                 socket.emit('handshake', { first: true, username });
+                // Timeout if server does not respond to the handshake for more than 5 minutes.
+                timeout = setTimeout(() => {
+                    consoleOut(color('Handshake timed out!', 'red'));
+                    process.exit();
+                }, 5000);
             } else {
                 consoleOut(color('Username cannot be empty!', 'red'));
                 process.exit(); // Terminate the program.
@@ -141,6 +148,8 @@ rl.question('Server: ', (address) => {
             return process.exit();
         }
 
+        // Clear the timeout.
+        clearTimeout(timeout);
         // Initialize the chat.
         chat();
         return rl.prompt();
