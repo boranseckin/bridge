@@ -25,7 +25,10 @@ Install the bridge package by running `npm install -g boranseckin/bridge`.
 
 ### Server
 1. Run `npx bridge-server` to start the server.
-    - If you want to change the default port (3636), use `npx bridge-server -p <port>`.
+    - If you want to change the default port (`3636`), use `-p <port>` argument.
+    - If you want to change the default channel (`/`), use `-c <channel>` argument.
+    
+    Example: `npx bridge-server -p 1111 -c super`
 2. You will see the log of connections on your terminal.
 
 ### Commands
