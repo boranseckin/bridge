@@ -17,6 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "ansi-color": "^0.2.1",
+    "meow": "^6.0.1",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0"
   },
