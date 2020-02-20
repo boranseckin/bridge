@@ -44,6 +44,7 @@ Everything starting with a forward slash (`/`) is assumed to be a command.
 - `/id` is used to print user's ID.
 - `/server` is used to print server's address.
 - `/status` is used to print the connection status.
+- `/help` is used to print all the usable commands.
 - `/exit` is used to exit the program.
 
 ## Dependencies
