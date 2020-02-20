@@ -50,10 +50,13 @@ const cli = meow(`
     description: false,
 });
 
-// The port and the channel for the socket to listen
-const { port, channel } = cli.flags;
-
+// The port for the socket to listen.
+const { port } = cli.flags;
 const io = socketio.listen(port);
+
+// The channel for the socket to open.
+let { channel } = cli.flags;
+channel = Array.isArray(channel) ? channel : [channel];
 
 console.log(`Bridge - Server initialized! Port: ${port} - Channel: [/${channel ? channel.join(' /') : ''}]`);
 
