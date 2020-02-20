@@ -329,6 +329,26 @@ function chatCommands(cmd, arg = '') {
         rl.prompt();
         break;
 
+    case 'help':
+        // List all the usable commands.
+        consoleOut(color(
+            'Commands: \n'
+            + ' /me <message>\n'
+            + ' /w <to> <message>\n'
+            + ' /username <username>\n'
+            + ' /room <room>\n'
+            + ' /ch <channel>\n'
+            + ' /clear\n'
+            + ' /users\n'
+            + ' /id\n'
+            + ' /server\n'
+            + ' /status\n'
+            + ' /help\n'
+            + ' /exit',
+            'yellow',
+        ));
+        break;
+
     case 'exit':
         // Exit the program.
         process.exit();
