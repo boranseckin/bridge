@@ -12,36 +12,50 @@
  */
 
 const socketio = require('socket.io');
+const meow = require('meow');
 
-function handleParse(args) {
-    /**
-     * Get the port number and the channel name as command line arguments
-     */
+const cli = meow(`
+    Bridge - Server
 
-    let port;
-    const channel = []; // Array because of more than one channel
+    Usage
+    $ bridge-server <options>
 
-    args.forEach((arg, index) => {
-        if (arg.startsWith('-p') || arg.startsWith('--port')) {
-            port = args[index + 1];
-        } else if (arg.startsWith('-c') || arg.startsWith('--channel')) {
-            // Add each '-c' argument to the channel array.
-            channel.push(args[index + 1]);
-        }
-    });
+    Options
+    --port,    -p  Select the port to run the server
+    --channel, -c  Open a new channel in the server
 
-    return {
-        port: port || 3636,
-        channel,
-    };
-}
+    Examples
+    $ bridge-server -p 1111
+        Port: 1111 / Channel: [/]
+    
+    $ bridge-server -c test
+        Port: 3636 / Channel: [/, /test]
+    
+    $ bridge-server -p 1111 -c foo -c bar
+        Port: 1111 / Channel: [/, /foo, /bar]
+`, {
+    flags: {
+        port: {
+            type: 'number',
+            alias: 'p',
+            default: 3636,
+        },
+        channel: {
+            type: 'string',
+            alias: 'c',
+        },
+    },
+    autoVersion: true,
+    autoHelp: true,
+    description: false,
+});
 
 // The port and the channel for the socket to listen
-const { port, channel } = handleParse(process.argv);
+const { port, channel } = cli.flags;
 
 const io = socketio.listen(port);
 
-console.log(`Bridge - Server initialized! [Port]: ${port} - [Channel]: /${channel}`);
+console.log(`Bridge - Server initialized! Port: ${port} - Channel: [/${channel ? channel.join(' /') : ''}]`);
 
 // Users array to keep track of online users and bind their usernames to their IDs.
 let users = [];
@@ -283,6 +297,8 @@ function openSocket(mainSocket) {
 openSocket(io.of('/'));
 
 // Start server at each channel argument.
-channel.forEach((ch) => {
-    openSocket(io.of(`/${ch}`));
-});
+if (channel) {
+    channel.forEach((ch) => {
+        openSocket(io.of(`/${ch}`));
+    });
+}
