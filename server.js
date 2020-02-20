@@ -21,8 +21,10 @@ const cli = meow(`
     $ bridge-server <options>
 
     Options
-    --port,    -p  Select the port to run the server
-    --channel, -c  Open a new channel in the server
+    --port,    -p  Select the port to run the server.
+    --channel, -c  Open a new channel in the server.
+    --version      Show the current version of the package.
+    --help         Show this help message.
 
     Examples
     $ bridge-server -p 1111
