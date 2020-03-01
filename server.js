@@ -60,7 +60,7 @@ const io = socketio.listen(port);
 let { channel } = cli.flags;
 channel = Array.isArray(channel) ? channel : [channel];
 
-console.log(`Bridge - Server initialized! Port: ${port} - Channel: [/${channel ? channel.join(' /') : ''}]`);
+console.log(`Bridge - Server initialized! Port: ${port} - ${channel.length === 1 ? 'Channel: [/]' : `Channels: [/ /${channel.join(' /')}]`}`);
 
 // Users array to keep track of online users and bind their usernames to their IDs.
 let users = [];
