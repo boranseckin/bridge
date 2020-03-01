@@ -291,6 +291,7 @@ function openSocket(mainSocket) {
                 if (user.id !== socket.id) {
                     return user;
                 }
+                mainSocket.emit('message', { type: 'notice', message: `[${user.username}] has left!` });
                 console.log(`User [${user.username}] disconnected from [${socket.request.connection.remoteAddress}] with ID [${socket.id}]`);
                 return null;
             });
