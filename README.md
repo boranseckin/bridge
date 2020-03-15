@@ -1,6 +1,6 @@
 # Bridge - Simple Chat Service
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/boranseckin/bridge?style=for-the-badge) ![David](https://img.shields.io/david/boranseckin/bridge?style=for-the-badge)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/boranseckin/bridge?style=for-the-badge) ![David](https://img.shields.io/david/boranseckin/bridge?style=for-the-badge) ![Code Style](https://img.shields.io/badge/code%20style-airbnb-blue?style=for-the-badge)
 
 Bridge is a basic CLI chat application using [Socket.io](https://socket.io/).
 
