@@ -60,6 +60,8 @@ const io = socketio.listen(port);
 let { channel } = cli.flags;
 channel = Array.isArray(channel) ? channel : [channel];
 
+channel = channel.filter((value, index) => channel.indexOf(value) === index);
+
 if (channel[0] === '' || channel[0] === undefined) channel.shift();
 
 console.log(`Bridge - Server initialized! Port: ${port} - ${channel.length === 0 ? 'Channel: [/]' : `Channels: [/ /${channel.join(' /')}]`}`);
