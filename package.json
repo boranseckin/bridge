@@ -1,6 +1,6 @@
 {
   "name": "@boranseckin/bridge",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Bridge - Simple Chat Service with Socket.io",
   "main": "index.js",
   "scripts": {
